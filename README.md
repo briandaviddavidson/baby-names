@@ -20,6 +20,7 @@ npm run build   # static export in out/, based at /names/
 1. **Any name**: search a name to see how many babies got it each year, per 1,000 births of each sex, with peak year, best rank and the latest year called out. Searches go in the URL (`#name=Emma`), so a lookup can be shared.
 2. **Overnight sensations**: the 20 sharpest one-year jumps in a name's share of births (at least 1,000 babies in the jump year), and whether the name was still at least half as popular 10 years after its peak. The likely pop-culture triggers in `lib/charts/spike-notes.js` are editorial notes, kept to well-documented cases.
 3. **Crossing over**: names that went from mostly boys to mostly girls (over 70%), or the reverse, using 5-year averages and only names with at least 10,000 babies on each side of the 50% crossing.
+4. **The long tail**: the share of babies given one of that year's 10 or 100 most popular names, by decade and sex.
 
 ## The data
 

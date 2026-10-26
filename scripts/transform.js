@@ -17,6 +17,7 @@ import { ranks, readNational, readStates, totals, trim } from './lib/ssa.js';
 import { shard } from '../lib/shards.js';
 import { spikes } from '../lib/charts/spikes.js';
 import { flips } from '../lib/charts/flips.js';
+import { longTail } from '../lib/charts/long-tail.js';
 
 export const MIN_TOTAL = 100;
 // Ranks are kept for the top 1,000 only, like SSA's own tables; deeper ranks
@@ -86,7 +87,8 @@ await rm(processedPath('insights'), { recursive: true, force: true });
 await mkdir(processedPath('insights'), { recursive: true });
 await writeJson(processedPath('insights/spikes.json'), spikes(counts, births, national));
 await writeJson(processedPath('insights/flips.json'), flips(counts, national));
-console.log('Insights: spikes, flips');
+await writeJson(processedPath('insights/long-tail.json'), longTail(counts, births, national));
+console.log('Insights: spikes, flips, long-tail');
 
 const rankBySex = Object.fromEntries(SEXES.map((s) => [s, ranks(counts[s], length)]));
 const names = new Map();

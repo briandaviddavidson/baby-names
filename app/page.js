@@ -1,11 +1,13 @@
 import ChartCard from '../components/ChartCard.js';
-import Legend from '../components/Legend.js';
+import Legend, { SEX_ITEMS } from '../components/Legend.js';
 import NameLookup from '../components/charts/NameLookup.js';
 import SpikesChart from '../components/charts/SpikesChart.js';
 import FlipsChart from '../components/charts/FlipsChart.js';
+import LongTailChart from '../components/charts/LongTailChart.js';
+import { longTailCaption, longTailTableRows } from '../lib/charts/long-tail.js';
 import { FLIP, flipTableRows, flipsCaption } from '../lib/charts/flips.js';
 import { SPIKE, STATUS_COLOR, spikeTableRows, spikesCaption } from '../lib/charts/spikes.js';
-import { flips, spikes, totalBabies, years } from '../lib/data.js';
+import { flips, longTail, spikes, totalBabies, years } from '../lib/data.js';
 import { fmt } from '../lib/series.js';
 
 export default function Home() {
@@ -100,6 +102,23 @@ export default function Home() {
             ]}
           />
           <FlipsChart list={flips} firstYear={firstYear} lastYear={lastYear} />
+        </ChartCard>
+
+        <ChartCard
+          id="long-tail"
+          eyebrow="04 · The long tail"
+          title="Are names getting more diverse?"
+          subtitle="Share of babies given one of that year’s 10 or 100 most popular names, by decade"
+          hint="Hover or touch a point to read its value."
+          takeaway={longTailCaption(longTail, { lastYear })}
+          note={`*${Math.floor(lastYear / 10) * 10}–${lastYear} only. Each year’s top names are that year’s own. Early decades are less complete: many people born before 1937, when Social Security began, never applied for a card. Different names a year (in the table) counts only names given to at least 5 babies, so it also grows with the number of births.`}
+          table={{
+            columns: ['Decade', 'Girls, top 10', 'Girls, top 100', 'Boys, top 10', 'Boys, top 100', 'Girls’ names a year', 'Boys’ names a year'],
+            rows: longTailTableRows(longTail, { lastYear }),
+          }}
+        >
+          <Legend items={SEX_ITEMS} shape="line" />
+          <LongTailChart rows={longTail} lastYear={lastYear} />
         </ChartCard>
       </main>
 
