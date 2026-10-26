@@ -1,0 +1,3 @@
+Anna,F,2700
+Mary,F,6919
+John,M,8769

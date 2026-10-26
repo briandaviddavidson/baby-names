@@ -1,0 +1,3 @@
+CA,F,1910,Mary,295
+CA,F,1911,Mary,300
+CA,M,1911,John,40
