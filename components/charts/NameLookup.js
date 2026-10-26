@@ -1,20 +1,16 @@
 'use client';
 
 import * as Plot from '@observablehq/plot';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChartCard from '../ChartCard.js';
 import Legend, { SEX_ITEMS } from '../Legend.js';
 import NameSearch from '../NameSearch.js';
 import PlotHost from '../PlotHost.js';
 import { baseOptions, tipOptions, usePlot } from '../usePlot.js';
 import { loadName, loadYears } from '../../lib/data-client.js';
+import { setName as setSharedName, watchName } from '../../lib/name-param.js';
 import { lookup, lookupCaption, oneIn } from '../../lib/charts/lookup.js';
 import { SEX_LABEL, fmt } from '../../lib/series.js';
-
-const DEFAULT_NAME = 'Jordan';
-
-// The name in the URL (#name=Emma), so a lookup can be shared.
-const nameFromHash = () => new URLSearchParams(window.location.hash.slice(1)).get('name');
 
 const tipLine = (d) => {
   const sex = SEX_LABEL[d.sex][0].toUpperCase() + SEX_LABEL[d.sex].slice(1);
@@ -145,12 +141,7 @@ export default function NameLookup({ firstYear, lastYear, minTotal }) {
   const [name, setName] = useState(null);
   const [state, setState] = useState({ status: 'loading' });
 
-  useEffect(() => {
-    setName(nameFromHash() || DEFAULT_NAME);
-    const onHash = () => setName(nameFromHash() || DEFAULT_NAME);
-    window.addEventListener('hashchange', onHash);
-    return () => window.removeEventListener('hashchange', onHash);
-  }, []);
+  useEffect(() => watchName(setName), []);
 
   useEffect(() => {
     if (!name) return;
@@ -166,11 +157,6 @@ export default function NameLookup({ firstYear, lastYear, minTotal }) {
       live = false;
     };
   }, [name]);
-
-  const search = useCallback((n) => {
-    history.replaceState(null, '', `#name=${encodeURIComponent(n)}`);
-    setName(n);
-  }, []);
 
   const data = state.data && { ...state.data, firstYear, lastYear };
   const ok = state.status === 'ok' || (state.status === 'loading' && data);
@@ -203,7 +189,7 @@ export default function NameLookup({ firstYear, lastYear, minTotal }) {
         }
       }
     >
-      <NameSearch initial={name ?? ''} onSearch={search} />
+      <NameSearch initial={name ?? ''} onSearch={setSharedName} />
       {state.status === 'missing' && (
         <p className="status">
           No “{name}” in the data. Either fewer than {fmt(minTotal)} babies have had it since {firstYear}, or SSA spells

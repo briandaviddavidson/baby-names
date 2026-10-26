@@ -4,7 +4,7 @@
 //   names/<xx>.json          per name and sex: [counts, ranks] (ranks top 1,000
 //                            only), sharded by name prefix ("em" holds Emma, …)
 //   names/index.json         the shard keys
-//   state-totals.json        total births per state, year and sex
+//   state-totals.json        reported and estimated births per state, year and sex
 //   states/<xx>.json         per name and sex: yearly counts per state
 //   states/index.json        the shard keys
 //   insights/<chart>.json    precomputed numbers for the site-wide charts
@@ -19,6 +19,7 @@ import { spikes } from '../lib/charts/spikes.js';
 import { flips } from '../lib/charts/flips.js';
 import { longTail } from '../lib/charts/long-tail.js';
 import { letters } from '../lib/charts/letters.js';
+import { baskets } from '../lib/charts/state-map.js';
 
 export const MIN_TOTAL = 100;
 // Ranks are kept for the top 1,000 only, like SSA's own tables; deeper ranks
@@ -112,12 +113,18 @@ const state = readStates(join(RAW_DIR, 'state'));
 const stateLength = state.lastYear - state.firstYear + 1;
 if (state.lastYear !== lastYear) console.warn(`Warning: state data ends in ${state.lastYear}, national in ${lastYear}`);
 const codes = Object.keys(state.states).sort();
+const basket = baskets(national, state);
 await writeJson(processedPath('state-totals.json'), {
   firstYear: state.firstYear,
   lastYear: state.lastYear,
+  // Sums of the published counts.
   births: Object.fromEntries(
     codes.map((code) => [code, Object.fromEntries(SEXES.map((s) => [s, Array.from(totals(state.states[code][s], stateLength))]))]),
   ),
+  // Estimated births from the national top names (see baskets in lib/charts/state-map.js).
+  estimated: basket.births,
+  basketSize: basket.size,
+  basketShare: basket.share,
 });
 const stateNames = new Map();
 for (const name of kept) {

@@ -22,6 +22,7 @@ npm run build   # static export in out/, based at /names/
 3. **Crossing over**: names that went from mostly boys to mostly girls (over 70%), or the reverse, using 5-year averages and only names with at least 10,000 babies on each side of the 50% crossing.
 4. **The long tail**: the share of babies given one of that year's 10 or 100 most popular names, by decade and sex.
 5. **Sound and shape**: average name length, and the share of babies whose name ends in each letter, by year and sex, weighted by babies.
+6. **Where**: a U.S. state map for any name, with a year slider (1910 on) and a girls/boys toggle. States are colored by babies per 1,000 estimated births of that sex, on a d3-geo Albers USA projection drawn with Observable Plot (state outlines from `us-atlas`). The map's search shares the URL name with chart 1.
 
 ## The data
 
@@ -67,10 +68,12 @@ Every series is stored as `[startYear, value, value, …]`. Leading and trailing
 | `years.json` | Year range, thresholds, data source, and total births per year by sex |
 | `names/index.json` | Shard keys |
 | `names/<key>.json` | `{ Name: { F: [counts, ranks], M: [counts, ranks] } }`. The ranks series is left out if the name never made the top 1,000 |
-| `state-totals.json` | Total births per state, year and sex |
+| `state-totals.json` | Births per state, year and sex: `births` sums the published counts; `estimated` corrects for suppression (below) |
 | `states/index.json` | Shard keys |
 | `states/<key>.json` | `{ Name: { F: { CA: counts, … }, M: { … } } }` |
 | `insights/<chart>.json` | Numbers for the site-wide charts, computed from every name by `lib/charts/<chart>.js` |
+
+**State births are estimated.** In a small state, names given to fewer than 5 babies can add up to over half of all babies (Wyoming's published counts cover about 43% of its girls in 2025), so dividing by the sum of published counts would inflate every small state's shares. Instead, each state's births are estimated as its babies with that year's 100 most popular names nationally, divided by those names' national share of births. Those names are almost never suppressed. Regional differences in naming make this accurate to roughly 15%.
 
 Shards are keyed by the first letters of the name, lower-cased. Two letters is the default (`em` holds Emma, Emmett, and so on), and a shard over 150 KB is split into longer prefixes until it fits. A name is in the shard with the longest key that's a prefix of it (`shardFor` in `lib/shards.js`).
 

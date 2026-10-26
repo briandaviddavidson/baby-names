@@ -5,6 +5,7 @@ import SpikesChart from '../components/charts/SpikesChart.js';
 import FlipsChart from '../components/charts/FlipsChart.js';
 import LongTailChart from '../components/charts/LongTailChart.js';
 import LettersChart from '../components/charts/LettersChart.js';
+import StateMap from '../components/charts/StateMap.js';
 import { lettersCaption, lettersTableRows } from '../lib/charts/letters.js';
 import { longTailCaption, longTailTableRows } from '../lib/charts/long-tail.js';
 import { FLIP, flipTableRows, flipsCaption } from '../lib/charts/flips.js';
@@ -139,6 +140,8 @@ export default function Home() {
           <Legend items={SEX_ITEMS} shape="line" />
           <LettersChart data={letters} />
         </ChartCard>
+
+        <StateMap minStateTotal={years.minStateTotal} />
       </main>
 
       <footer className="site-footer">

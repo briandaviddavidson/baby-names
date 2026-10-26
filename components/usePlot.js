@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { attachKeyboard } from './plotKeyboard.js';
 
 // Reads the chart tokens off :root so Plot gets real colors (SVG attributes can't
@@ -96,4 +96,17 @@ export function baseOptions(width, theme) {
 
 export function tipOptions(theme) {
   return { fill: theme.surface, stroke: theme.axis, textPadding: 8 };
+}
+
+// The current theme, re-read when the color scheme changes (for non-Plot charts).
+export function useTheme() {
+  const [theme, setTheme] = useState(null);
+  useEffect(() => {
+    const scheme = window.matchMedia('(prefers-color-scheme: dark)');
+    const update = () => setTheme(readTheme());
+    update();
+    scheme.addEventListener('change', update);
+    return () => scheme.removeEventListener('change', update);
+  }, []);
+  return theme;
 }
