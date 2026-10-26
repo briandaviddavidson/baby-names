@@ -21,6 +21,7 @@ npm run build   # static export in out/, based at /names/
 2. **Overnight sensations**: the 20 sharpest one-year jumps in a name's share of births (at least 1,000 babies in the jump year), and whether the name was still at least half as popular 10 years after its peak. The likely pop-culture triggers in `lib/charts/spike-notes.js` are editorial notes, kept to well-documented cases.
 3. **Crossing over**: names that went from mostly boys to mostly girls (over 70%), or the reverse, using 5-year averages and only names with at least 10,000 babies on each side of the 50% crossing.
 4. **The long tail**: the share of babies given one of that year's 10 or 100 most popular names, by decade and sex.
+5. **Sound and shape**: average name length, and the share of babies whose name ends in each letter, by year and sex, weighted by babies.
 
 ## The data
 

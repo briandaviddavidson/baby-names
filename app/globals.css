@@ -295,7 +295,7 @@ a:hover {
 }
 
 .plot-short {
-  min-height: 280px;
+  min-height: 240px;
 }
 
 /* Keyboard focus: an outline on the chart, a ring on the focused mark. */
@@ -695,4 +695,16 @@ a:hover {
   .stat-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+/* A card holding several related plots, each with a small heading */
+.chart-stack h3 {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 24px 0 8px;
+}
+
+.chart-stack h3:first-child {
+  margin-top: 8px;
 }

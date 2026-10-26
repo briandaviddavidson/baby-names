@@ -4,10 +4,12 @@ import NameLookup from '../components/charts/NameLookup.js';
 import SpikesChart from '../components/charts/SpikesChart.js';
 import FlipsChart from '../components/charts/FlipsChart.js';
 import LongTailChart from '../components/charts/LongTailChart.js';
+import LettersChart from '../components/charts/LettersChart.js';
+import { lettersCaption, lettersTableRows } from '../lib/charts/letters.js';
 import { longTailCaption, longTailTableRows } from '../lib/charts/long-tail.js';
 import { FLIP, flipTableRows, flipsCaption } from '../lib/charts/flips.js';
 import { SPIKE, STATUS_COLOR, spikeTableRows, spikesCaption } from '../lib/charts/spikes.js';
-import { flips, longTail, spikes, totalBabies, years } from '../lib/data.js';
+import { flips, letters, longTail, spikes, totalBabies, years } from '../lib/data.js';
 import { fmt } from '../lib/series.js';
 
 export default function Home() {
@@ -119,6 +121,23 @@ export default function Home() {
         >
           <Legend items={SEX_ITEMS} shape="line" />
           <LongTailChart rows={longTail} lastYear={lastYear} />
+        </ChartCard>
+
+        <ChartCard
+          id="letters"
+          eyebrow="05 · Sound and shape"
+          title="How long, and how it ends"
+          subtitle="The average length of babies’ names, and the share of babies whose name ends in each letter, by year"
+          hint="Hover or touch a line or cell to read a year. Darker cells are more common endings."
+          takeaway={lettersCaption(letters)}
+          note="Weighted by babies: a name given to 10,000 babies counts 10,000 times. Heatmaps show letters that ended at least 1% of one sex’s names in some year."
+          table={{
+            columns: ['Year', 'Girls, letters', 'Boys, letters', 'Girls, top endings', 'Boys, top endings'],
+            rows: lettersTableRows(letters),
+          }}
+        >
+          <Legend items={SEX_ITEMS} shape="line" />
+          <LettersChart data={letters} />
         </ChartCard>
       </main>
 
