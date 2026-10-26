@@ -1,6 +1,8 @@
 # Baby Names
 
-Charts on what Americans name their babies, built from the Social Security Administration's baby name data (1880 to the latest year SSA has published). It's a static Next.js site, deployed at [briandaviddavidson.com/names/](https://briandaviddavidson.com/names/).
+Charts on what Americans name their babies, built from the Social Security Administration's baby name data (1880 to the latest year SSA has published). It's a static Next.js site.
+
+**Live site:** https://briandaviddavidson.com/names/
 
 ## Getting started
 
@@ -14,6 +16,15 @@ npm run build   # static export in out/, based at /names/
 ```
 
 `dev` and `build` first copy the processed data into `public/data/`, where the browser fetches it.
+
+## Deploying
+
+The site is served from [briandaviddavidson.com/names/](https://briandaviddavidson.com/names/) as part of the [personal website](https://github.com/briandaviddavidson/briandaviddavidson.com): that repo's build script clones this repo, runs `npm ci` and `npm run build`, and publishes `out/` under `/names/`. The processed data is committed, so the build needs no network access or keys. To ship a change, push it here, then run the website's build and deploy:
+
+```sh
+./scripts/build.sh
+npx firebase-tools deploy --only hosting
+```
 
 ## Charts
 
