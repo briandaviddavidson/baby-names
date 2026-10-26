@@ -2,8 +2,10 @@ import ChartCard from '../components/ChartCard.js';
 import Legend from '../components/Legend.js';
 import NameLookup from '../components/charts/NameLookup.js';
 import SpikesChart from '../components/charts/SpikesChart.js';
+import FlipsChart from '../components/charts/FlipsChart.js';
+import { FLIP, flipTableRows, flipsCaption } from '../lib/charts/flips.js';
 import { SPIKE, STATUS_COLOR, spikeTableRows, spikesCaption } from '../lib/charts/spikes.js';
-import { spikes, totalBabies, years } from '../lib/data.js';
+import { flips, spikes, totalBabies, years } from '../lib/data.js';
 import { fmt } from '../lib/series.js';
 
 export default function Home() {
@@ -76,6 +78,28 @@ export default function Home() {
             ]}
           />
           <SpikesChart list={spikes} before={SPIKE.before} after={SPIKE.after} />
+        </ChartCard>
+
+        <ChartCard
+          id="flips"
+          eyebrow="03 · Crossing over"
+          title="Names that changed sides"
+          subtitle={`Each bar runs from the last year a name was mostly given to one sex (over ${Math.round(FLIP.high * 100)}%) to the first year it was mostly given to the other. The dot is the year it crossed 50%.`}
+          hint="Hover or touch a dot to read a name’s flip."
+          takeaway={flipsCaption(flips, { lastYear })}
+          note={`Shares are 5-year averages, judged only in years a name averaged at least ${FLIP.minPerYear} babies. A flip counts only with at least ${fmt(FLIP.minSide)} babies of the old sex before the crossing and of the new sex after it, which leaves out names like Ashley, given to only a few thousand boys before it became a girls’ name. Jaime flipped twice: to girls in the mid-1970s, then back to boys.`}
+          table={{
+            columns: ['Name', 'Flip', 'Last mostly old sex', 'Crossed 50%', 'First mostly new sex', 'Babies before (old sex)', 'Babies after (new sex)', 'Girls, latest'],
+            rows: flipTableRows(flips),
+          }}
+        >
+          <Legend
+            items={[
+              { key: 'F', label: 'Became a girls’ name', color: 'var(--girls)', shape: 'dot' },
+              { key: 'M', label: 'Became a boys’ name', color: 'var(--boys)', shape: 'dot' },
+            ]}
+          />
+          <FlipsChart list={flips} firstYear={firstYear} lastYear={lastYear} />
         </ChartCard>
       </main>
 
