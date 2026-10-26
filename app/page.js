@@ -1,5 +1,9 @@
+import ChartCard from '../components/ChartCard.js';
+import Legend from '../components/Legend.js';
 import NameLookup from '../components/charts/NameLookup.js';
-import { totalBabies, years } from '../lib/data.js';
+import SpikesChart from '../components/charts/SpikesChart.js';
+import { SPIKE, STATUS_COLOR, spikeTableRows, spikesCaption } from '../lib/charts/spikes.js';
+import { spikes, totalBabies, years } from '../lib/data.js';
 import { fmt } from '../lib/series.js';
 
 export default function Home() {
@@ -49,6 +53,30 @@ export default function Home() {
         </section>
 
         <NameLookup firstYear={firstYear} lastYear={lastYear} minTotal={years.minTotal} />
+
+        <ChartCard
+          id="spikes"
+          eyebrow="02 · Overnight sensations"
+          title="Sudden spikes, and what happened next"
+          subtitle={`The ${spikes.length} sharpest one-year jumps in a name’s popularity, from ${SPIKE.before} years before to ${SPIKE.after} after. Each line is a share of the name’s peak (the gray line is 100%).`}
+          hint="Hover or touch a panel to read a year. The dot marks ten years after the peak."
+          takeaway={spikesCaption(spikes)}
+          note={`A jump is the rise in a name’s share of same-sex births from one year to the next, counting a suppressed previous year as 5 babies. Only jumps to at least ${fmt(SPIKE.minCount)} babies count, one per name. “Stuck” means that ${SPIKE.laterYears} years after its peak (the jump year or up to 3 years later) the name was at least ${Math.round(SPIKE.stuckAt * 100)}% as popular; “too soon” means that hasn’t happened yet. The likely triggers in the table are editorial notes, not part of the SSA data.`}
+          table={{
+            columns: ['Name', 'Sex', 'Year', 'Babies, year before → jump year', 'Jump', `${SPIKE.laterYears} years after peak`, 'Status', 'Likely trigger'],
+            rows: spikeTableRows(spikes),
+          }}
+        >
+          <Legend
+            shape="line"
+            items={[
+              { key: 'stuck', label: 'Stuck', color: STATUS_COLOR.stuck },
+              { key: 'faded', label: 'Faded', color: STATUS_COLOR.faded },
+              ...(spikes.some((s) => s.status === 'too soon') ? [{ key: 'soon', label: 'Too soon to tell', color: STATUS_COLOR['too soon'] }] : []),
+            ]}
+          />
+          <SpikesChart list={spikes} before={SPIKE.before} after={SPIKE.after} />
+        </ChartCard>
       </main>
 
       <footer className="site-footer">

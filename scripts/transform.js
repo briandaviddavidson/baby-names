@@ -7,6 +7,7 @@
 //   state-totals.json        total births per state, year and sex
 //   states/<xx>.json         per name and sex: yearly counts per state
 //   states/index.json        the shard keys
+//   insights/<chart>.json    precomputed numbers for the site-wide charts
 // Arrays are [startYear, values…] with leading and trailing zeros trimmed.
 // Names given fewer than MIN_TOTAL babies in all years combined are left out.
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
@@ -14,6 +15,7 @@ import { join } from 'node:path';
 import { RAW_DIR, SOURCE_FILE, processedPath } from './lib/paths.js';
 import { ranks, readNational, readStates, totals, trim } from './lib/ssa.js';
 import { shard } from '../lib/shards.js';
+import { spikes } from '../lib/charts/spikes.js';
 
 export const MIN_TOTAL = 100;
 // Ranks are kept for the top 1,000 only, like SSA's own tables; deeper ranks
@@ -76,6 +78,13 @@ await writeJson(processedPath('years.json'), {
   source: { national: source.national.source, state: source.state.source, fetchedAt: source.fetchedAt },
   births: yearTotals,
 });
+
+// Site-wide charts need every name, so their numbers are computed here.
+const births = Object.fromEntries(SEXES.map((s) => [s, totals(counts[s], length)]));
+await rm(processedPath('insights'), { recursive: true, force: true });
+await mkdir(processedPath('insights'), { recursive: true });
+await writeJson(processedPath('insights/spikes.json'), spikes(counts, births, national));
+console.log('Insights: spikes');
 
 const rankBySex = Object.fromEntries(SEXES.map((s) => [s, ranks(counts[s], length)]));
 const names = new Map();

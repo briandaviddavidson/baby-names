@@ -18,6 +18,7 @@ npm run build   # static export in out/, based at /names/
 ## Charts
 
 1. **Any name**: search a name to see how many babies got it each year, per 1,000 births of each sex, with peak year, best rank and the latest year called out. Searches go in the URL (`#name=Emma`), so a lookup can be shared.
+2. **Overnight sensations**: the 20 sharpest one-year jumps in a name's share of births (at least 1,000 babies in the jump year), and whether the name was still at least half as popular 10 years after its peak. The likely pop-culture triggers in `lib/charts/spike-notes.js` are editorial notes, kept to well-documented cases.
 
 ## The data
 
@@ -66,6 +67,7 @@ Every series is stored as `[startYear, value, value, …]`. Leading and trailing
 | `state-totals.json` | Total births per state, year and sex |
 | `states/index.json` | Shard keys |
 | `states/<key>.json` | `{ Name: { F: { CA: counts, … }, M: { … } } }` |
+| `insights/<chart>.json` | Numbers for the site-wide charts, computed from every name by `lib/charts/<chart>.js` |
 
 Shards are keyed by the first letters of the name, lower-cased. Two letters is the default (`em` holds Emma, Emmett, and so on), and a shard over 150 KB is split into longer prefixes until it fits. A name is in the shard with the longest key that's a prefix of it (`shardFor` in `lib/shards.js`).
 
