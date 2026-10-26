@@ -147,3 +147,10 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# SSA source files: regenerate with `npm run fetch-data`
+data/raw/
+data/*.zip
+
+# Copied from data/processed by scripts/copy-data.js before dev and build
+public/data/
