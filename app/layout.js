@@ -1,5 +1,6 @@
 import '@fontsource-variable/public-sans';
 import '@fontsource-variable/fraunces';
+import Script from 'next/script';
 import './globals.css';
 
 const title = 'What We Name Our Babies';
@@ -35,6 +36,19 @@ export default function RootLayout({ children }) {
     // Browser extensions add attributes to <html> and <body> before hydration;
     // this ignores those two elements' attributes only.
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Google tag (gtag.js) */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-SHEBFEH58S" strategy="afterInteractive" />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-SHEBFEH58S');
+          `}
+        </Script>
+      </head>
       <body suppressHydrationWarning>{children}</body>
     </html>
   );
