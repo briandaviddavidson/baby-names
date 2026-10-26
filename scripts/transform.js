@@ -72,6 +72,7 @@ await writeJson(processedPath('years.json'), {
   minTotal: MIN_TOTAL,
   minStateTotal: MIN_STATE_TOTAL,
   maxRank: MAX_RANK,
+  names: { all: nameTotals.size, kept: kept.length },
   source: { national: source.national.source, state: source.state.source, fetchedAt: source.fetchedAt },
   births: yearTotals,
 });

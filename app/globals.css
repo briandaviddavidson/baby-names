@@ -1,0 +1,698 @@
+/*
+ * Brand: a quiet, paper-like page with one accent (deep teal). Fraunces (serif) for
+ * the story, Public Sans for interface and charts. Girls and boys are the validated
+ * series pair, not brand colors.
+ */
+:root {
+  color-scheme: light;
+  --font-sans: 'Public Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+
+  --page: #f8f7f3;
+  --surface: #ffffff;
+  --text-primary: #17181a;
+  --text-secondary: #4a4c50;
+  --text-muted: #6b6d72;
+  --grid: #e4e3dd;
+  --axis: #c6c5bd;
+  --rule: #dcdbd3;
+  --border: rgba(23, 24, 26, 0.1);
+
+  /* Brand accent, deep teal: --accent for rules and marks, --accent-text for teal type. */
+  --accent: #2b7a6c;
+  --accent-text: #1f5f54;
+
+  /* Series colors, validated as a pair (dataviz validate_palette.js, light and dark). */
+  --girls: #d4487f;
+  --boys: #2a78d6;
+  --highlight: #2b7a6c;
+
+  --map-ocean: #e9e8e2;
+  --map-land: #f8f7f3;
+  --map-border: #c9c8bf;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme='light'])) {
+    color-scheme: dark;
+    --page: #111214;
+    --surface: #1a1b1d;
+    --text-primary: #ecebe6;
+    --text-secondary: #bbbab3;
+    --text-muted: #93928b;
+    --grid: #2a2b2d;
+    --axis: #3b3c3f;
+    --rule: #303134;
+    --border: rgba(255, 255, 255, 0.1);
+    --accent: #4fa898;
+    --accent-text: #6cc2b2;
+    --girls: #d55181;
+    --boys: #3987e5;
+    --highlight: #4fa898;
+    --map-ocean: #0b0c0d;
+    --map-land: #1d1e20;
+    --map-border: #393a3d;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --page: #111214;
+  --surface: #1a1b1d;
+  --text-primary: #ecebe6;
+  --text-secondary: #bbbab3;
+  --text-muted: #93928b;
+  --grid: #2a2b2d;
+  --axis: #3b3c3f;
+  --rule: #303134;
+  --border: rgba(255, 255, 255, 0.1);
+  --accent: #4fa898;
+  --accent-text: #6cc2b2;
+  --girls: #d55181;
+  --boys: #3987e5;
+  --highlight: #4fa898;
+  --map-ocean: #0b0c0d;
+  --map-land: #1d1e20;
+  --map-border: #393a3d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--accent-text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.wrap {
+  margin: 0 auto;
+  max-width: 920px;
+  padding: 0 16px;
+}
+
+/* Site bar */
+.site-bar {
+  border-bottom: 1px solid var(--rule);
+}
+
+.site-bar .wrap {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  min-height: 56px;
+}
+
+.site-name {
+  align-items: center;
+  display: inline-flex;
+  font-weight: 500;
+  gap: 10px;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
+.site-name .mark {
+  color: var(--accent);
+  height: 26px;
+  width: 26px;
+}
+
+.site-bar .byline {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+/* Hero */
+.hero {
+  padding: 72px 0 56px;
+}
+
+.eyebrow {
+  color: var(--accent-text);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  margin: 0 0 16px;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2.75rem, 9vw, 5rem);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1;
+  margin: 0 0 24px;
+  text-wrap: balance;
+}
+
+.hero .deck {
+  color: var(--text-secondary);
+  font-family: var(--font-serif);
+  font-size: clamp(1.1875rem, 2.6vw, 1.4375rem);
+  line-height: 1.45;
+  margin: 0;
+  max-width: 34em;
+  text-wrap: pretty;
+}
+
+.hero-stats {
+  border-top: 1px solid var(--rule);
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  list-style: none;
+  margin: 48px 0 0;
+  padding: 20px 0 0;
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding: 48px 0 40px;
+  }
+
+  .hero-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.hero-stats strong {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.hero-stats span {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+/* Chart sections: open, ruled sections rather than boxed cards */
+.chart {
+  border-top: 1px solid var(--rule);
+  padding: 48px 0 56px;
+}
+
+.chart .eyebrow {
+  margin-bottom: 10px;
+}
+
+.chart h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 4.5vw, 2.25rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  margin: 0 0 8px;
+  text-wrap: balance;
+}
+
+.chart .subtitle {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin: 0 0 4px;
+  max-width: 60ch;
+}
+
+.chart .hint {
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  margin: 0 0 24px;
+  max-width: 70ch;
+}
+
+.chart .takeaway {
+  border-left: 2px solid var(--accent);
+  font-family: var(--font-serif);
+  font-size: 1.1875rem;
+  line-height: 1.5;
+  margin: 28px 0 0;
+  max-width: 40em;
+  padding-left: 18px;
+  text-wrap: pretty;
+}
+
+.chart .note {
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  margin: 12px 0 0;
+  max-width: 80ch;
+}
+
+/* Footer */
+.site-footer {
+  border-top: 1px solid var(--rule);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  padding: 40px 0 64px;
+}
+
+.site-footer .mark {
+  color: var(--accent);
+  height: 28px;
+  margin-bottom: 16px;
+  width: 28px;
+}
+
+.site-footer p {
+  margin: 0 0 10px;
+  max-width: 72ch;
+}
+
+.site-footer .disclaimer {
+  margin-top: 20px;
+}
+
+.plot {
+  font-family: var(--font-sans);
+  min-height: 320px;
+  width: 100%;
+}
+
+.plot-short {
+  min-height: 280px;
+}
+
+/* Keyboard focus: an outline on the chart, a ring on the focused mark. */
+.plot:focus {
+  outline: none;
+}
+
+.plot:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+}
+
+.plot .kbd-focus {
+  paint-order: stroke;
+  stroke: var(--text-primary);
+  stroke-width: 2px;
+}
+
+.plot svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.plot [aria-label='tip'] text {
+  font-variant-numeric: tabular-nums;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.legend li {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+}
+
+.legend .swatch {
+  border-radius: 3px;
+  display: inline-block;
+  height: 12px;
+  width: 12px;
+}
+
+.legend .swatch.dot {
+  border-radius: 50%;
+  height: 10px;
+  width: 10px;
+}
+
+.legend .swatch.line {
+  border-radius: 1px;
+  height: 2px;
+  width: 16px;
+}
+
+/* Table view: the accessible twin of each chart */
+.table-view {
+  margin-top: 12px;
+  font-size: 0.875rem;
+}
+
+.table-view summary {
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.table-view .scroll {
+  overflow-x: auto;
+  margin-top: 8px;
+}
+
+.table-view table {
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  width: 100%;
+}
+
+.table-view th,
+.table-view td {
+  border-bottom: 1px solid var(--grid);
+  padding: 4px 8px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.table-view th:first-child,
+.table-view td:first-child {
+  text-align: left;
+}
+
+.table-view th .text-button {
+  font-weight: inherit;
+  text-align: left;
+}
+
+/* Arc map */
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.map-filters {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-bottom: 8px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--grid);
+  border-radius: 999px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: 0.875rem;
+  gap: 6px;
+  min-height: 32px;
+  padding: 2px 12px;
+}
+
+.chip:hover {
+  border-color: var(--axis);
+}
+
+.chip[aria-pressed='true'] {
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.chip .swatch {
+  border-radius: 50%;
+  height: 8px;
+  width: 8px;
+}
+
+.select select {
+  background: var(--surface);
+  border: 1px solid var(--grid);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.875rem;
+  min-height: 32px;
+  padding: 2px 8px;
+}
+
+.map-count {
+  align-items: baseline;
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.8125rem;
+  gap: 4px 12px;
+  margin: 0 0 8px;
+}
+
+.map-count p {
+  margin: 0;
+}
+
+.text-button {
+  background: none;
+  border: 0;
+  border-radius: 4px;
+  color: var(--text-primary);
+  cursor: pointer;
+  font: inherit;
+  padding: 2px 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.text-button:disabled {
+  color: var(--text-muted);
+  cursor: default;
+  text-decoration: none;
+}
+
+.map-frame {
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.map {
+  background: var(--map-ocean);
+  height: 520px;
+  position: relative;
+  width: 100%;
+}
+
+/* Covers the map until it's clicked, so page scrolling passes over it. */
+.map-activate {
+  align-items: center;
+  background: color-mix(in srgb, var(--page) 35%, transparent);
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  inset: 0;
+  justify-content: center;
+  padding: 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.map-activate span {
+  background: var(--surface);
+  border: 1px solid var(--axis);
+  border-radius: 999px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  color: var(--text-primary);
+  font-weight: 500;
+  padding: 10px 20px;
+}
+
+.map-activate:hover span,
+.map-activate:focus-visible span {
+  border-color: var(--accent);
+}
+
+.map-controls {
+  bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: absolute;
+  right: 12px;
+  /* Above the activation overlay, so the buttons work before the map is clicked. */
+  z-index: 2;
+}
+
+.map-controls button {
+  background: var(--surface);
+  border: 1px solid var(--axis);
+  border-radius: 6px;
+  color: var(--text-primary);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+  height: 32px;
+  min-width: 32px;
+  padding: 0 8px;
+}
+
+.map-controls button[aria-pressed='true'] {
+  border-color: var(--text-primary);
+  font-weight: 600;
+}
+
+.map-controls button:hover {
+  border-color: var(--text-primary);
+}
+
+@media (max-width: 600px) {
+  .map {
+    height: 420px;
+  }
+}
+
+/* Covers the map while loading, and Google's own error screen if the key is rejected. */
+.map-status {
+  align-items: center;
+  background: var(--page);
+  color: var(--text-muted);
+  z-index: 1;
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 16px;
+  position: absolute;
+  text-align: center;
+}
+
+.map-tip {
+  background: var(--surface) !important;
+  border: 1px solid var(--axis);
+  border-radius: 6px;
+  color: var(--text-primary) !important;
+  font: 13px/1.4 var(--font-sans) !important;
+  max-width: 260px;
+  padding: 8px 10px !important;
+}
+
+
+/* Name search */
+.name-search {
+  margin: 0 0 20px;
+  max-width: 420px;
+}
+
+.name-search label {
+  color: var(--text-secondary);
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.name-search-row {
+  display: flex;
+  gap: 8px;
+}
+
+.name-search input {
+  background: var(--surface);
+  border: 1px solid var(--axis);
+  border-radius: 8px;
+  color: var(--text-primary);
+  flex: 1;
+  font: inherit;
+  font-size: 1.0625rem;
+  min-height: 44px;
+  min-width: 0;
+  padding: 6px 12px;
+}
+
+.name-search input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.name-search button {
+  background: var(--text-primary);
+  border: 0;
+  border-radius: 8px;
+  color: var(--page);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  min-height: 44px;
+  padding: 0 18px;
+}
+
+.name-search button:hover {
+  background: var(--accent-text);
+}
+
+.status {
+  color: var(--text-secondary);
+  max-width: 60ch;
+}
+
+/* Callouts above a chart: the numbers the caption talks about */
+.stat-row {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+}
+
+.stat-row strong {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.stat-row span {
+  color: var(--text-muted);
+  display: block;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+}
+
+@media (max-width: 600px) {
+  .stat-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

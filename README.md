@@ -2,6 +2,23 @@
 
 Charts on what Americans name their babies, built from the Social Security Administration's baby name data (1880 to the latest year SSA has published). It's a static Next.js site, deployed at [briandaviddavidson.com/names/](https://briandaviddavidson.com/names/).
 
+## Getting started
+
+You need Node.js 20.9 or later.
+
+```sh
+npm install
+npm run dev     # dev server at http://localhost:3000/names/
+npm test        # node --test
+npm run build   # static export in out/, based at /names/
+```
+
+`dev` and `build` first copy the processed data into `public/data/`, where the browser fetches it.
+
+## Charts
+
+1. **Any name**: search a name to see how many babies got it each year, per 1,000 births of each sex, with peak year, best rank and the latest year called out. Searches go in the URL (`#name=Emma`), so a lookup can be shared.
+
 ## The data
 
 Source: [Beyond the Top 1000 Names](https://www.ssa.gov/oact/babynames/limits.html), Social Security Administration.
@@ -55,11 +72,22 @@ Shards are keyed by the first letters of the name, lower-cased. Two letters is t
 ## Project structure
 
 ```
+app/                Page, layout and styles (Next.js App Router, static export)
+components/
+  ChartCard.js      Shared chart frame: title, takeaway, note, table view
+  NameSearch.js     Name search box with suggestions
+  charts/           One component per chart
+  usePlot.js        Renders an Observable Plot chart, re-rendering on resize and theme change
 scripts/
   fetch-data.js     Download and unzip the SSA files
   transform.js      Build data/processed
+  copy-data.js      Copy data/processed into public/data before dev and build
   lib/ssa.js        Readers, totals and ranks for the raw files
 lib/
+  charts/           Each chart's numbers and its computed caption (tested)
+  data.js           Build-time data for server components
+  data-client.js    Browser-side loading of shards
+  series.js         Helpers for the [startYear, …values] series format
   shards.js         Shard writing and lookup, shared with the site
 data/processed/     Committed output of transform.js
 test/               node --test
